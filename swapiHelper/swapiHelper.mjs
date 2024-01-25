@@ -1,21 +1,41 @@
-const baseUrl = "https://swapi.dev/api/";
+const baseUrl = 'https://swapi.dev/api/';
 
 // this is just used to map the episode_id to the correct movie poster image.
 const posters = [
-  "phantom-menace.jpg",
-  "attack-of-the-clones.jpg",
-  "revenge-of-the-sith.jpg",
-  "a-new-hope.jpg",
-  "empire-strikes-back.jpg",
-  "return-of-the-jedi.jpg"
+  'phantom-menace.jpg',
+  'attack-of-the-clones.jpg',
+  'revenge-of-the-sith.jpg',
+  'a-new-hope.jpg',
+  'empire-strikes-back.jpg',
+  'return-of-the-jedi.jpg',
 ];
 /*************TEMPLATES************/
 function planetTemplate(planet) {
-
+  return ` <li>
+  <h4 class="planet-name">${planet.name}</h4>
+  <p>Climate: <span class="planet-climate">${planet.climate}</span></p>
+  <p>Terrain: <span class="planet-terrain">${planet.terrain}</span></p>
+  <p>Year: <span class="planet-year">${planet.orbital_period} days</span></p>
+  <p>Day: <span class="planet-day">${planet.rotational_period} hrs</span></p>
+  <p>Population:<span class="planet-population">${planet.population}</span></p>
+</li>`;
 }
 
 function starshipTemplate(ship) {
-
+  return `<li>
+  <h4 class="ship-name">${ship.name}</h4>
+  <p>Model: <span class="starship-model">${ship.model}</span></p>
+  <p>
+    Manufacturer:
+    <span class="ship-manufacturer">${ship.manufacturer}</span>
+  </p>
+  <p>
+    Cost_in_credits:
+    <span class="ship-cost-in-credits"
+      >${ship.cost_in_credits} credits</span
+    >
+  </p>
+<</li>`;
 }
 
 function movieListTemplate(film) {
@@ -49,11 +69,11 @@ function movieDetailsTemplate(film) {
 // pass in the element selector you would like the list rendered in
 export async function renderFilmList(elementSelector) {
   const element = document.querySelector(elementSelector);
-  let films = await makeRequest(baseUrl + "films");
+  let films = await makeRequest(baseUrl + 'films');
   films = films.results;
   console.log(films);
 
-  element.innerHTML = films.map(movieListTemplate).join("");
+  element.innerHTML = films.map(movieListTemplate).join('');
 }
 
 // pass in the ID of the film you want details on, and the selector of the element you want the details rendered in.
@@ -62,7 +82,7 @@ export async function renderFilmDetails(filmId, elementSelector) {
   const el = document.querySelector(elementSelector);
   try {
     if (!film) {
-      throw new Error("Film not found");
+      throw new Error('Film not found');
     }
     console.log(film);
     // insert the main template and film info
@@ -71,10 +91,14 @@ export async function renderFilmDetails(filmId, elementSelector) {
     el.innerHTML = movieDetailsTemplate(film);
 
     // TODO add planets and starships
-
   } catch (err) {
     console.log(err);
   }
+  // add planets
+  addCategoryDetails(film.planets, '.film__planets-list', planetTemplate);
+
+  //add ships
+  addCategoryDetails(film.starships, '.film__starships-list', starshipTemplate);
 }
 
 /*************HELPER FUNCTIONS************/
@@ -102,10 +126,10 @@ async function addCategoryDetails(categoryUrls, selector, template) {
     const detailsHtml = details.map(template);
     document
       .querySelector(selector)
-      .insertAdjacentHTML("afterbegin", detailsHtml.join(""));
+      .insertAdjacentHTML('afterbegin', detailsHtml.join(''));
     document
-      .querySelector(selector).querySelector('.smallloader')
-      .style.display = "none";
+      .querySelector(selector)
+      .querySelector('.smallloader').style.display = 'none';
   } catch (err) {
     console.log(err);
   }
@@ -120,7 +144,7 @@ async function getListDetails(list) {
 
 // this function exists because the episodeId of the film is NOT the same as the ID we would use to make a request for just this movie's details.  We have to extract that from the URL provided instead.
 function getFilmId(filmUrl) {
-  const parts = filmUrl.split("/");
+  const parts = filmUrl.split('/');
   //the id will always be the second to last entry in the array because there is a trailing slash...
   console.log(parts[parts.length - 2]);
   return parts[parts.length - 2];
