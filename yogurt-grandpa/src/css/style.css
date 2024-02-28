@@ -30,6 +30,17 @@ header {
   justify-content: space-between;
   padding: 0 10px;
 }
+.alertlist {
+  --background: red;
+  --color: white;
+}
+.alertlist > p {
+  background-color: var(--background);
+  color: var(--color);
+  height: auto;
+  padding: 0.5em;
+  margin: 0;
+}
 .logo {
   line-height: 60px;
   width: 245px;
@@ -202,6 +213,10 @@ button {
   grid-column: 3;
 }
 
+.hide {
+  display: none;
+}
+
 @media screen and (min-width: 500px) {
   body {
     max-width: 1080px;
@@ -219,4 +234,45 @@ button {
 footer {
   font-size: var(--small-font);
   padding: 1em;
+}
+
+/* Product icons */
+.product-grid {
+  display: flex;
+  justify-content: space-evenly;
+  list-style-type: none;
+}
+.product-grid li {
+  display: block;
+  justify-content: center;
+}
+.product {
+  width: 30%;
+}
+
+/* Cart Animations */
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.2);
+  }
+  30% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out;
 }
